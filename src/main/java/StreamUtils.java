@@ -10,7 +10,7 @@ public class StreamUtils {
 
   public static String numberdNamesUtil(List<String> names) {
     return IntStream.range(0, names.size())
-            .mapToObj(indx -> (indx * 2 + 1) + "." + names.get(indx))
+            .mapToObj(indx -> (indx * 2 + 1) + ". " + names.get(indx))
             .collect(Collectors.joining(", "));
   }
 
@@ -60,15 +60,4 @@ public class StreamUtils {
     return Stream.concat(firstStream, secondStream).collect(Collectors.toList());
   }
 
-  public static void main(String[] args) {
-    // System.out.println(numberdNamesUtil(Arrays.asList("Ivan", "Arnold", "Robert", "Dakota", "Mike", "Leonid")));
-    // System.out.println(sortAndUppercase(Arrays.asList("hELLo", "worlD", "mY", "Name", "Is")));
-    // System.out.println(collectElements(Arrays.asList("1, 2, 0", "4, 5")));
-
-    //LongStream intStream = linearCongruentialGenerator(137L);
-    //System.out.println(intStream.limit(10).boxed().collect(Collectors.toList()).toString());
-
-
-    //System.out.println(getElementsFromBothStreams(Stream.of("1", "3", "5"), Stream.of("2", "4", "6")));
-  }
 }
