@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -29,35 +30,31 @@ public class StreamUtils {
 
   }
 
-  //TODO Why there is 4 params in test?
-  public static LongStream linearCongruentialGenerator(Long seed) {
-    long a = 25214903917L;
-    int c = 11;
-    long m = (long) Math.pow(2, 48);
-
+  public static LongStream linearCongruentialGenerator(Long seed, long a, int c, long m) {
     return LongStream.iterate(seed, i -> (a * i + c) % m);
-
   }
 
-  //TODO some kind of ...
   public static <T> List<T> getElementsFromBothStreams(Stream<T> firstStream, Stream<T> secondStream) {
+    Spliterator<T> firstStreamIterator = firstStream.spliterator();
+    Spliterator<T> secondStreamIterator = secondStream.spliterator();
 
-    List<T> firstStreamAsList = firstStream.collect(Collectors.toList());
-    List<T> secondStreamAsList = secondStream.collect(Collectors.toList());
-    int minSize = Math.min(firstStreamAsList.size(), secondStreamAsList.size());
-    List<T> result = new ArrayList<>(minSize);
+    long minSize = Math.min(firstStreamIterator.estimateSize(), secondStreamIterator.estimateSize());
+    List<T> result = new ArrayList<>();
 
-    IntStream.range(0, minSize).forEach(it -> {
-      result.add(firstStreamAsList.get(it));
-      result.add(secondStreamAsList.get(it));
+
+    LongStream.range(0, minSize).forEach(s -> {
+      firstStreamIterator.tryAdvance(result::add);
+      secondStreamIterator.tryAdvance(result::add);
     });
 
     return result;
   }
 
   public static <T> List<T> collectStreamsData(Stream<T> firstStream, Stream<T> secondStream) {
-
     return Stream.concat(firstStream, secondStream).collect(Collectors.toList());
   }
 
+  public static void main(String[] args) {
+    getElementsFromBothStreams(Stream.of("1", "3", "5"), Stream.of("2", "4", "6"));
+  }
 }
