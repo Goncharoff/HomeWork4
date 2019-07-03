@@ -54,7 +54,4 @@ public class StreamUtils {
     return Stream.concat(firstStream, secondStream).collect(Collectors.toList());
   }
 
-  public static void main(String[] args) {
-    getElementsFromBothStreams(Stream.of("1", "3", "5"), Stream.of("2", "4", "6"));
-  }
 }
